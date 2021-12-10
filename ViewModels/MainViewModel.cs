@@ -13,12 +13,12 @@ namespace LcrGame.ViewModels
         {
             var players = new List<IPlayer>
             {
-                new Player("Player 1"),
-                new Player("Player 2"),
-                new Player("Player 3"),
+                new PlayerViewModel("Player 1"),
+                new PlayerViewModel("Player 2"),
+                new PlayerViewModel("Player 3"),
             };
 
-            GameState = new CurrentTurnPlayers(players);
+            GameState = new CurrentTurnPlayersViewModel(players);
 
             _playTurn = new PlayTurn(GameState);
         }
@@ -26,7 +26,7 @@ namespace LcrGame.ViewModels
         public ICurrentTurnPlayers GameState { get; }
 
         public ICommand ExectueCommand => _ExectueCommand ??= new RelayCommand(
-            () => _playTurn.Execute(),
+            () => _playTurn.ExecuteTurn(),
             () => string.IsNullOrWhiteSpace(GameState.WinnerIs));
     }
 }

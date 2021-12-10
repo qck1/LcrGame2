@@ -6,9 +6,8 @@ namespace LcrGame
     public interface IPlayTurn
     {
         ICurrentTurnPlayers Players { get; }
-        void Execute();
-
-        bool IsWinner();
+        void ExecuteTurn();
+        void ExecuteGame();
     }
 
     public class PlayTurn : IPlayTurn
@@ -20,7 +19,7 @@ namespace LcrGame
             Players = players ?? throw new ArgumentNullException(nameof(players));
         }
 
-        public void Execute()
+        public void ExecuteTurn()
         {
             var dieRolls = Math.Min(Players.CurrnetPlayer.Tokens, 3);
             Players.ClearDieRolls();
@@ -51,9 +50,12 @@ namespace LcrGame
             Players.NextTurn();
         }
 
-        public bool IsWinner()
+        public void ExecuteGame()
         {
-            return Players.Players.Where(i => i.Tokens > 0).Count() == 1;
+            while (Players.Winner is null)
+            {
+                ExecuteTurn();
+            }
         }
 
         public ICurrentTurnPlayers Players { get; }

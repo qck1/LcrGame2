@@ -13,17 +13,18 @@ namespace LcrGame
         IPlayer CurrnetPlayer { get; }
         IPlayer RightPlayer { get; }
         IPlayer LeftPlayer { get; }
+        IPlayer Winner { get; }
+        string WinnerIs { get; }
         int CenterTokens { get; }
         string DieRolls { get; }
-        string WinnerIs{ get; }
-
+        int TurnCount{ get; }
         void ClearDieRolls();
         void AddDieRoll(resultEnum dieRoll);
         void NextTurn();
         void AddCenterTokens();
     }
 
-    public class CurrentTurnPlayers : ICurrentTurnPlayers, INotifyPropertyChanged
+    public class CurrentTurnPlayersViewModel : ICurrentTurnPlayers, INotifyPropertyChanged
     {
         private IPlayer _currnetPlayer;
         private IPlayer _rightPlayer;
@@ -31,8 +32,10 @@ namespace LcrGame
         private int _centerTokens;
         private List<string> _dieRolls = new List<string>();
         private string _winnerIs;
+        private int _turnCount;
+        private IPlayer _winner;
 
-        public CurrentTurnPlayers(IEnumerable<IPlayer> players)
+        public CurrentTurnPlayersViewModel(IEnumerable<IPlayer> players)
         {
             Players = players.ToArray();
             RightPlayer = Players[Players.Length - 1];
@@ -94,6 +97,19 @@ namespace LcrGame
             }
         }
 
+        public int TurnCount
+        {
+            get => _turnCount;
+            private set
+            {
+                if (_turnCount != value)
+                {
+                    _turnCount = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public string WinnerIs
         {
             get => _winnerIs;
@@ -102,6 +118,19 @@ namespace LcrGame
                 if (_winnerIs != value)
                 {
                     _winnerIs = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public IPlayer Winner
+        {
+            get => _winner;
+            private set
+            {
+                if (_winner != value)
+                {
+                    _winner = value;
                     OnPropertyChanged();
                 }
             }
@@ -134,11 +163,13 @@ namespace LcrGame
             var playersWithTokens = Players.Where(i => i.Tokens > 0);
             if (playersWithTokens.Count() == 1)
             {
+                Winner = playersWithTokens.First();
                 WinnerIs = "The Winner: " + playersWithTokens.First().Name;
                 CurrnetPlayer = playersWithTokens.First();
             }
             else
             {
+                TurnCount++;
                 RightPlayer = CurrnetPlayer;
                 CurrnetPlayer = LeftPlayer;
                 var leftPlayerIndex = Array.FindIndex(Players, i => i == CurrnetPlayer);

@@ -11,11 +11,11 @@ namespace LcrGame.ViewModels
         void RemoveToken();
     }
 
-    public class Player : IPlayer, INotifyPropertyChanged
+    public class PlayerViewModel : IPlayer, INotifyPropertyChanged
     {
         private int tokens;
 
-        public Player(string name)
+        public PlayerViewModel(string name)
         {
             Name = name;
             Tokens = 3;
@@ -44,6 +44,11 @@ namespace LcrGame.ViewModels
         public void RemoveToken()
         {
             Tokens--;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} with {Tokens} Tokens";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
