@@ -23,6 +23,7 @@ namespace LcrGame.ViewModels
         private CancellationTokenSource _cancellationTokenSource;
         private CancellationToken _cancellationToken;
         private bool _isBusy;
+        private List<IPlayer> _players;
 
         public AutoPlayViewModel()
         {
@@ -91,6 +92,19 @@ namespace LcrGame.ViewModels
             }
         }
 
+
+        public List<IPlayer> Players
+        {
+            get => _players;
+            set
+            {
+                if (_players != value)
+                {
+                    _players = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public RelayCommand PlayCommand => _playCommand ??= new RelayCommand(
             async () => await ExecuteSetAsync(),
             () => NumberOfGames > 1 && NumberOfPlayers > 2 && !_isBusy);
@@ -99,9 +113,9 @@ namespace LcrGame.ViewModels
             () => { _cancellationTokenSource.Cancel(); },
             () => _isBusy);
 
-        private static PlayerViewModel[] CreatePlayers(int numberOfPlayers)
+        private static List<IPlayer> CreatePlayers(int numberOfPlayers)
         {
-            return Enumerable.Range(1, numberOfPlayers).Select(i => new PlayerViewModel("Player " + i)).ToArray();
+            return Enumerable.Range(1, numberOfPlayers).Select(i => new PlayerViewModel("Player " + i)).Cast<IPlayer>().ToList();
         }
 
         private void ExecuteSet()
@@ -110,7 +124,8 @@ namespace LcrGame.ViewModels
 
             for (int gameCounter = 0; gameCounter < NumberOfGames; gameCounter++)
             {
-                var game = new CurrentTurnPlayersViewModel(CreatePlayers(NumberOfPlayers));
+                Players.ForEach(i => i.Reset());
+                var game = new CurrentTurnPlayersViewModel(Players);
                 var playTurn = new PlayTurn(game);
                 playTurn.ExecuteGame();
                 Games[gameCounter] = new GameStats(game.Winner.Name, game.TurnCount);
@@ -136,6 +151,7 @@ namespace LcrGame.ViewModels
 
             var Games = new GameStats[NumberOfGames];
             BarGraph.Reset(NumberOfGames);
+            Players = CreatePlayers(NumberOfPlayers);
 
             await Task.Factory.StartNew(() =>
             {
@@ -146,7 +162,8 @@ namespace LcrGame.ViewModels
                     {
                         return;
                     }
-                    var game = new CurrentTurnPlayersViewModel(CreatePlayers(NumberOfPlayers));
+                    Players.ForEach(i => i.Reset());
+                    var game = new CurrentTurnPlayersViewModel(Players);
                     var playTurn = new PlayTurn(game);
                     playTurn.ExecuteGame();
                     dispatcher.Invoke(

@@ -6,13 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:LcrGame"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModesl="clr-namespace:LcrGame.ViewModels"
+    xmlns:viewModels="clr-namespace:LcrGame.ViewModels"
     Title="AutoPlayWindow"
     Width="800"
     Height="450"
     mc:Ignorable="d">
     <Window.DataContext>
-        <viewModesl:AutoPlayViewModel />
+        <viewModels:AutoPlayViewModel />
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -58,23 +58,25 @@
                 <RowDefinition Height="5" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock
                 Grid.Column="0"
-                VerticalAlignment="Center" Margin="0 0 -10 0"
+                Margin="0,0,-10,0"
+                VerticalAlignment="Center"
                 FontSize="20"
-                Text="Turns"> 
+                Text="Turns">
                 <TextBlock.LayoutTransform>
                     <RotateTransform Angle="-90" />
                 </TextBlock.LayoutTransform>
             </TextBlock>
             <TextBlock
+                Grid.Row="3"
                 Grid.Column="3"
-                Grid.Row="3" Margin="0 -20 0 0"
+                Margin="0,-20,0,0"
                 HorizontalAlignment="Center"
                 FontSize="20"
-                Text="Games"> 
-             </TextBlock>
+                Text="Games" />
             <TextBox
                 Grid.Column="1"
                 HorizontalAlignment="Right"
@@ -107,15 +109,20 @@
                 Text="{Binding BarGraph.TotalItemCount}" />
             <Border
                 Grid.Row="1"
-                Grid.Column="2"
+                Grid.Column="3"
                 BorderBrush="Black"
                 BorderThickness="1,0,1,0" />
             <Border
                 Grid.Column="3"
                 BorderBrush="Black"
                 BorderThickness="1">
-
                 <Grid>
+                    <Border Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Background="Transparent">
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <Border Width="40" Height="2" BorderThickness="1" BorderBrush="Green" Margin="5"/>
+                            <TextBlock Text="Average Value" Margin="5"/>
+                        </StackPanel>
+                    </Border>
                     <Grid DataContext="{Binding BarGraph}">
                         <ItemsControl ItemTemplate="{StaticResource BarGraphTemplate}" ItemsSource="{Binding ItemsSource}">
                             <ItemsControl.ItemsPanel>
@@ -156,6 +163,39 @@
                     </Grid>
                 </Grid>
             </Border>
+            <ItemsControl
+                Grid.Row="3"
+                Grid.Column="3"
+                HorizontalAlignment="Center"
+                ItemsSource="{Binding Players}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Width="100"
+                            Margin="10"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            CornerRadius="2">
+                            <StackPanel Orientation="Vertical">
+                                <Grid>
+                                    <Image Source="Assets/Images/Person.png" />
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center" FontSize="32"
+                                        Foreground="Green"
+                                        Text="{Binding Tokens}" />
+                                </Grid>
+                                <TextBlock HorizontalAlignment="Center" Text="{Binding Name}" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
     </Grid>
 </Window>

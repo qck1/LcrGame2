@@ -9,6 +9,7 @@ namespace LcrGame.ViewModels
         int Tokens { get; }
         void AddToken();
         void RemoveToken();
+        void Reset();
     }
 
     public class PlayerViewModel : IPlayer, INotifyPropertyChanged
@@ -34,6 +35,11 @@ namespace LcrGame.ViewModels
                     OnPropertyChanged();
                 }
             }
+        }
+
+        public void Reset()
+        {
+            Tokens = 3;
         }
 
         public void AddToken()

@@ -19,6 +19,8 @@ namespace LcrGame
             Players = players ?? throw new ArgumentNullException(nameof(players));
         }
 
+        public ICurrentTurnPlayers Players { get; }
+
         public void ExecuteTurn()
         {
             var dieRolls = Math.Min(Players.CurrnetPlayer.Tokens, 3);
@@ -57,7 +59,5 @@ namespace LcrGame
                 ExecuteTurn();
             }
         }
-
-        public ICurrentTurnPlayers Players { get; }
     }
 }

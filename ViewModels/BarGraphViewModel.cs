@@ -6,14 +6,42 @@ using System.Runtime.CompilerServices;
 
 namespace LcrGame.ViewModels
 {
-    public class BarGraphViewModel : INotifyPrropertyChanged
+    public class BarGraphViewModel : INotifyPrropertyChanged, IMaximumMinimum
     {
         private double _maximumItemValue;
         private int _totalItemCount;
         private double _sum;
         private double _average;
+        private double _maximum;
+        private double _minimum;
 
         public ObservableCollection<double> ItemsSource { get; } = new ObservableCollection<double>();
+
+        public double Maximum
+        {
+            get => _maximum;
+            set
+            {
+                if (_maximum != value)
+                {
+                    _maximum = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public double Minimum
+        {
+            get => _minimum;
+            set
+            {
+                if (_minimum != value)
+                {
+                    _minimum = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public double MaximumItemValue
         {
@@ -68,6 +96,9 @@ namespace LcrGame.ViewModels
                 ItemsSource.Clear();
                 holding.ForEach(i => ItemsSource.Add(i));
             }
+
+            Maximum = Math.Max(item, Maximum);
+            Minimum = Math.Min(item, Minimum);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -83,6 +114,13 @@ namespace LcrGame.ViewModels
             _sum = 0;
             MaximumItemValue = 4;
             TotalItemCount = totalItemCount;
+            Maximum = 0;
+            Minimum = int.MaxValue;
         }
+    }
+    public interface IMaximumMinimum
+    {
+        double Maximum { get; }
+        double Minimum { get; }
     }
 }

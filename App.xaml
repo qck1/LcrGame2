@@ -60,12 +60,38 @@
                     </RowDefinition>
                 </Grid.RowDefinitions>
                 <Border
+                    Name="ValueBarBorder"
                     Grid.Row="1"
                     Grid.Column="1"
-                    Background="Blue"
                     BorderThickness="0"
                     ToolTip="{Binding}"
-                    ToolTipService.Placement="Top" />
+                    ToolTipService.Placement="Top">
+                    <Border.Background>
+                        <MultiBinding Converter="{converters:MaxMinColorValueConnverter}">
+                            <Binding />
+                            <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
+                        </MultiBinding>
+                    </Border.Background>
+                    <Popup
+                        AllowsTransparency="True"
+                        IsOpen="True"
+                        Placement="Top">
+                        <Border Background="#80FFFFFF" BorderThickness="0"  Margin="0,0,0,5">
+                            <TextBlock
+                                x:Name="AssociatedTextTextBox"
+                                Background="Transparent"
+                                FontWeight="Bold"
+                                Foreground="{Binding Background, ElementName=ValueBarBorder}">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{converters:MaxMinAssociatedTextValueConnverter}">
+                                        <Binding />
+                                        <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Border>
+                    </Popup>
+                </Border>
             </Grid>
         </DataTemplate>
     </Application.Resources>
