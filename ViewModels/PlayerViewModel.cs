@@ -5,6 +5,7 @@ namespace LcrGame.ViewModels
 {
     public interface IPlayer
     {
+        bool IsWinnter { get; set; }
         string Name { get; }
         int Tokens { get; }
         void AddToken();
@@ -14,7 +15,8 @@ namespace LcrGame.ViewModels
 
     public class PlayerViewModel : IPlayer, INotifyPropertyChanged
     {
-        private int tokens;
+        private int _tokens;
+        private bool _isWinner;
 
         public PlayerViewModel(string name)
         {
@@ -22,16 +24,29 @@ namespace LcrGame.ViewModels
             Tokens = 3;
         }
 
+        public bool IsWinnter
+        {
+            get => _isWinner;
+            set
+            {
+                if (_isWinner != value)
+                {
+                    _isWinner = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public string Name { get; }
 
         public int Tokens
         {
-            get => tokens;
+            get => _tokens;
             private set
             {
-                if (tokens != value)
+                if (_tokens != value)
                 {
-                    tokens = value;
+                    _tokens = value;
                     OnPropertyChanged();
                 }
             }
@@ -40,6 +55,7 @@ namespace LcrGame.ViewModels
         public void Reset()
         {
             Tokens = 3;
+            IsWinnter = false;
         }
 
         public void AddToken()

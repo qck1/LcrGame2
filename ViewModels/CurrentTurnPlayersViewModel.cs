@@ -17,7 +17,7 @@ namespace LcrGame
         string WinnerIs { get; }
         int CenterTokens { get; }
         string DieRolls { get; }
-        int TurnCount{ get; }
+        int TurnCount { get; }
         void ClearDieRolls();
         void AddDieRoll(resultEnum dieRoll);
         void NextTurn();
@@ -131,6 +131,7 @@ namespace LcrGame
                 if (_winner != value)
                 {
                     _winner = value;
+                    _winner.IsWinnter = true;
                     OnPropertyChanged();
                 }
             }
@@ -138,7 +139,7 @@ namespace LcrGame
 
         public string DieRolls
         {
-            get => _dieRolls.Any() ? "Die Rolls: " + string.Join(", ", _dieRolls) : string.Empty ;
+            get => _dieRolls.Any() ? "Die Rolls: " + string.Join(", ", _dieRolls) : string.Empty;
         }
 
         public void AddDieRoll(resultEnum dieRoll)

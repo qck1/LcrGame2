@@ -1,5 +1,6 @@
 ﻿using LcrGame.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
@@ -14,6 +15,8 @@ namespace LcrGame.Assets.ValueConverters
         Brush brushYellow = new SolidColorBrush(Colors.Yellow);
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            Debug.Assert(values[1] is IMaximumMinimum, $"The value of values[1] is {values[1].GetType()} not IMaximumMinimum");
+            Debug.Assert(values[0] is double, $"The value of values[0] is {values[0].GetType()} not Double");
             var value = System.Convert.ToInt32(values[0]);
             var maxMin = (IMaximumMinimum)values[1];
             if (maxMin.Minimum == maxMin.Maximum) return null;

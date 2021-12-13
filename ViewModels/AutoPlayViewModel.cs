@@ -201,7 +201,7 @@ namespace LcrGame.ViewModels
 
         public override string ToString()
         {
-            return NumberOfGames > 0 ? $"{NumberOfPlayers} players x {NumberOfGames}" : "NONE";
+            return NumberOfGames > 0 ? $"{NumberOfPlayers} players x {NumberOfGames} games" : "NONE";
         }
     }
 }

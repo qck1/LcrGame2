@@ -76,7 +76,10 @@
                         AllowsTransparency="True"
                         IsOpen="True"
                         Placement="Top">
-                        <Border Background="#80FFFFFF" BorderThickness="0"  Margin="0,0,0,5">
+                        <Border
+                            Margin="0,0,0,5"
+                            Background="#A0FFFFFF"
+                            BorderThickness="0">
                             <TextBlock
                                 x:Name="AssociatedTextTextBox"
                                 Background="Transparent"

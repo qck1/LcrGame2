@@ -87,6 +87,8 @@ namespace LcrGame.ViewModels
             ItemsSource.Add(item);
             _sum += item;
             Average = _sum / ItemsSource.Count();
+            var tempMinimum = Math.Min(item, Minimum);
+            Maximum = Math.Max(item, Maximum);
 
             if (item + 1 > MaximumItemValue)
             {
@@ -96,9 +98,13 @@ namespace LcrGame.ViewModels
                 ItemsSource.Clear();
                 holding.ForEach(i => ItemsSource.Add(i));
             }
-
-            Maximum = Math.Max(item, Maximum);
-            Minimum = Math.Min(item, Minimum);
+            else if (item < Minimum)
+            {
+                Minimum = item;
+                var holding = ItemsSource.Select(i => i).ToList();
+                ItemsSource.Clear();
+                holding.ForEach(i => ItemsSource.Add(i));
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
